@@ -57,7 +57,9 @@ const Main = () => {
                     movieList.map((movie, i) => (
                         <div key={i}>
                             {movie.title}<br />
-                            <img src={MOVIE_DB_IMAGE_URL.small+movie.poster_path} alt={movie.title} />
+                            <a href={`/detail/${movie.id}`}>
+                                <img src={MOVIE_DB_IMAGE_URL.small+movie.poster_path} alt={movie.title} />
+                            </a>
                         </div>
                     ))
                 }
