@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { MOVIE_DB_IMAGE_URL } from '../../api/movieApi';
 import { movieApiAxios as axios } from '../../axios';
 import { movieParam } from '../../config';
 
-const Main = () => {
+const Main = (props) => {
     const DEFAULT_CATEGORY = 'popular';
     const DEFAULT_PAGE = 1;
     const [category, setCategory] = useState(DEFAULT_CATEGORY);
@@ -15,13 +15,30 @@ const Main = () => {
         getMovies();
     }, [ category, page ])
 
-    const getMovies = () => {
-        const params = {
-            ...movieParam,
-            page
+    useEffect(() => {
+        getMovies('search')
+    }, [ props.searchText ])
+
+    const getMovies = filter => {
+        let path = '';
+        let config = {
+            params: {
+                ...movieParam,
+                page
+            }
         };
 
-        axios.get(`/movie/${category}`, {params})
+        if(filter === 'search' && props.searchText.length > 0) {
+            path = '/search/movie';
+            config.params = {
+                ...config.params,
+                query: props.searchText
+            }
+        } else {
+            path = `/movie/${category}`;
+        }
+
+        axios.get(path, config)
         .then(results => {
             if(totalPages !== results.data.total_pages)
                 setTotalPages(results.data.total_pages);
@@ -37,7 +54,7 @@ const Main = () => {
     }
 
     const nextPage = () => {
-        setPage(page+1);
+        setPage(page+1 > totalPages ? totalPages : page+1);
     }
 
     const prevPage = () => {
