@@ -22,15 +22,6 @@ const Detail = () => {
         })
     }, [ id ])
 
-    const genres = () => {
-        let returnData = '';
-        detail.genres.map(o => {
-            returnData += <span>{o.name}</span>
-        })
-
-        return returnData;
-    }
-
     return (
         <div>
             <div>

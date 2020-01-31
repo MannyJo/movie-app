@@ -1,23 +1,23 @@
-import React, { useState, useEffect, useReducer } from 'react';
-import { MOVIE_DB_IMAGE_URL } from '../../api/movieApi';
+import React, { useState, useEffect } from 'react';
 import { movieApiAxios as axios } from '../../axios';
 import { movieParam } from '../../config';
+import MovieList from '../MovieList/MovieList';
+import LoadMoreButton from '../LoadMoreButton/LoadMoreButton';
+import SearchCategory from '../SearchCategory/SearchCategory';
 
-const Main = (props) => {
+const Main = ({ searchText, setTitle, dispatch, page, setPage, DEFAULT_PAGE }) => {
     const DEFAULT_CATEGORY = 'popular';
-    const DEFAULT_PAGE = 1;
     const [category, setCategory] = useState(DEFAULT_CATEGORY);
-    const [page, setPage] = useState(DEFAULT_PAGE);
     const [totalPages, setTotalPages] = useState(DEFAULT_PAGE);
     const [movieList, setMovieList] = useState([]);
 
     useEffect(() => {
-        getMovies();
-    }, [ category, page ])
-
-    useEffect(() => {
-        getMovies('search')
-    }, [ props.searchText ])
+        if(searchText) {
+            getMovies('search');
+        } else {
+            getMovies();
+        }
+    }, [ category, searchText, page ])
 
     const getMovies = filter => {
         let path = '';
@@ -28,11 +28,11 @@ const Main = (props) => {
             }
         };
 
-        if(filter === 'search' && props.searchText.length > 0) {
+        if(filter === 'search' && searchText.length > 0) {
             path = '/search/movie';
             config.params = {
                 ...config.params,
-                query: props.searchText
+                query: searchText
             }
         } else {
             path = `/movie/${category}`;
@@ -42,50 +42,38 @@ const Main = (props) => {
         .then(results => {
             if(totalPages !== results.data.total_pages)
                 setTotalPages(results.data.total_pages);
-            setMovieList(results.data.results);
+            if(page === 1) {
+                setMovieList(results.data.results);
+            } else {
+                setMovieList([ ...movieList, ...results.data.results ]);
+            }
         }).catch(err => {
             console.log('Error with getting movies :', err);
         });
     }
 
     const handleClickCategory = filter => e => {
+        dispatch({ type: 'SEARCH_TITLE_RESET' });
+        setTitle('');
         setPage(DEFAULT_PAGE);
         setCategory(filter || DEFAULT_CATEGORY);
     }
 
-    const nextPage = () => {
-        setPage(page+1 > totalPages ? totalPages : page+1);
-    }
-
-    const prevPage = () => {
-        setPage(page-1 < 1 ? DEFAULT_PAGE : page-1);
+    const loadMore = () => {
+        if(totalPages >= page+1) {
+            setPage(page+1);
+        }
     }
 
     return (
         <div>
+            <SearchCategory handleClick={handleClickCategory} />
             <div>
-                <button onClick={handleClickCategory('popular')}>Popular</button>
-                <button onClick={handleClickCategory('now_playing')}>Now Playing</button>
-                <button onClick={handleClickCategory('top_rated')}>Top Rated</button>
-                <button onClick={handleClickCategory('upcoming')}>Upcoming</button>
+                {page} : {totalPages}
+                <LoadMoreButton loadMore={loadMore} />
             </div>
-            <div>
-                {
-                    movieList.map((movie, i) => (
-                        <div key={i}>
-                            {movie.title}<br />
-                            <a href={`/detail/${movie.id}`}>
-                                <img src={MOVIE_DB_IMAGE_URL.small+movie.poster_path} alt={movie.title} />
-                            </a>
-                        </div>
-                    ))
-                }
-            </div>
-            <div>
-                <button onClick={prevPage}>Prev</button>
-                <div>{totalPages}</div>
-                <button onClick={nextPage}>Next</button>
-            </div>
+            <MovieList movieList={movieList} />
+            <LoadMoreButton loadMore={loadMore} />
         </div>
     );
 }

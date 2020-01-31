@@ -1,59 +1,45 @@
 import React, { useState, useReducer } from 'react';
 import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
+  BrowserRouter as Router,
+  Switch,
+  Route
 } from 'react-router-dom';
+import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Detail from '../Detail/Detail';
 import SignIn from '../SignIn/SignIn';
 import { reducer } from '../../reducers/reducer';
 
 function App() {
+  const DEFAULT_PAGE = 1;
+  const initTitle = { title: '' };
   const [title, setTitle] = useState('');
-  const [state, dispatch] = useReducer(reducer, {title: ''});
-
-  const handleChange = () => e => {
-    setTitle(e.target.value);
-  }
-
-  const handleSearchBtn = () => e => {
-    e.preventDefault();
-    
-    dispatch({ type: 'SEARCH_WITH_TITLE', payload: {title}});
-  }
+  const [page, setPage] = useState(DEFAULT_PAGE);
+  const [state, dispatch] = useReducer(reducer, initTitle);
 
   return (
     <div>
       <Router>
-          <div>
-              <nav>
-                  <ul>
-                      <li>
-                          <Link to="/">Home</Link>
-                      </li>
-                      <li>
-                        <form onSubmit={handleSearchBtn()}>
-                          <input type="text" value={title} onChange={handleChange()} placeholder="Search by movie title" />
-                          <button type="submit">Submit</button>
-                        </form>
-                      </li>
-                      <li>
-                        <Link to="/auth">
-                          <button>Sign In</button>
-                        </Link>
-                      </li>
-                  </ul>
-              </nav>
-          </div>
-          <Switch>
-              <Route exact path="/">
-                <Main searchText={state.title} />
-              </Route>
-              <Route path="/detail/:id" component={Detail} />
-              <Route path="/auth" component={SignIn} />
-          </Switch>
+        <Header 
+          title={title} 
+          setTitle={setTitle} 
+          dispatch={dispatch} 
+          setPage={setPage} 
+        />
+        <Switch>
+          <Route exact path="/">
+            <Main 
+              searchText={state.title} 
+              setTitle={setTitle} 
+              dispatch={dispatch} 
+              page={page} 
+              setPage={setPage} 
+              DEFAULT_PAGE={DEFAULT_PAGE} 
+            />
+          </Route>
+          <Route path="/detail/:id" component={Detail} />
+          <Route path="/auth" component={SignIn} />
+        </Switch>
       </Router>
     </div>
   );
