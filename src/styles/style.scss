@@ -1,0 +1,12 @@
+@import "./variables";
+@import "./header";
+@import "./main";
+@import "./category";
+@import "./movie";
+
+body {
+    margin: 0;
+    background: url('../background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+}

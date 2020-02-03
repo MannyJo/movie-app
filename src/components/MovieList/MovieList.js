@@ -3,7 +3,7 @@ import Movie from '../Movie/Movie';
 
 const MovieList = (props) => {
     return (
-        <div>
+        <div className="movie-list">
             {props.movieList.map(movie => <Movie key={movie.id} movie={movie} />)}
         </div>
     )

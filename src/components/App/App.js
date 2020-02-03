@@ -10,10 +10,12 @@ import Detail from '../Detail/Detail';
 import SignIn from '../SignIn/SignIn';
 import { reducer } from '../../reducers/reducer';
 
+import '../../styles/style.scss';
+
 function App() {
   const DEFAULT_PAGE = 1;
   const initTitle = { title: '' };
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState(initTitle.title);
   const [page, setPage] = useState(DEFAULT_PAGE);
   const [state, dispatch] = useReducer(reducer, initTitle);
 
@@ -25,6 +27,7 @@ function App() {
           setTitle={setTitle} 
           dispatch={dispatch} 
           setPage={setPage} 
+          DEFAULT_PAGE={DEFAULT_PAGE} 
         />
         <Switch>
           <Route exact path="/">

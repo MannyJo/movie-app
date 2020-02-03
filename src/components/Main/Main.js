@@ -66,12 +66,8 @@ const Main = ({ searchText, setTitle, dispatch, page, setPage, DEFAULT_PAGE }) =
     }
 
     return (
-        <div>
+        <div className="main-container">
             <SearchCategory handleClick={handleClickCategory} />
-            <div>
-                {page} : {totalPages}
-                <LoadMoreButton loadMore={loadMore} />
-            </div>
             <MovieList movieList={movieList} />
             <LoadMoreButton loadMore={loadMore} />
         </div>

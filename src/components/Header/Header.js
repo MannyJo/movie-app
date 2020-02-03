@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Link,
 } from 'react-router-dom';
+import SearchBtn from '@material-ui/icons/Search'
+import Button from '@material-ui/core/Button';
+import Movie from '@material-ui/icons/Movie';
 
-const Header = ({ title, setTitle, dispatch, setPage }) => {
+const Header = ({ title, setTitle, dispatch, setPage, DEFAULT_PAGE }) => {
   
     const handleChange = () => e => {
         setTitle(e.target.value);
@@ -11,30 +14,40 @@ const Header = ({ title, setTitle, dispatch, setPage }) => {
   
     const handleSearchBtn = () => e => {
         e.preventDefault();
-        setPage(1);
+        setPage(DEFAULT_PAGE);
         dispatch({ type: 'SEARCH_WITH_TITLE', payload: { title } });
     }
 
     return (
-        <div>
-            <nav>
-                <ul>
-                    <li>
-                        <Link to="/" onClick={() => setPage(1)}>Home</Link>
-                    </li>
-                    <li>
-                        <form onSubmit={handleSearchBtn()}>
-                            <input type="text" value={title} onChange={handleChange()} placeholder="Search by movie title" />
-                            <button type="submit">Submit</button>
-                        </form>
-                    </li>
-                    <li>
-                        <Link to="/auth">
-                            <button>Sign In</button>
-                        </Link>
-                    </li>
-                </ul>
-            </nav>
+        <div className="sticky">
+            <div className="nav-bar">
+                <div className="logo">
+                    <Link to="/" onClick={() => setPage(DEFAULT_PAGE)}>
+                        <Movie style={{ fontSize: 40, color: '#fff' }} /> 
+                        <div>Manny Movies</div>
+                    </Link>
+                </div>
+                <div>
+                    <form className="search-form" onSubmit={handleSearchBtn()}>
+                        <input 
+                            className="search-box" 
+                            type="text" 
+                            value={title} 
+                            onChange={handleChange()} 
+                            placeholder="Search by movie title" 
+                        />
+                        <button className="search-btn" type="submit">
+                            <SearchBtn style={{ fontSize: 30, color: '#000', opacity: 0.5 }} />
+                        </button>
+                    </form>
+                </div>
+                <div className="empty-space"></div>
+                <div className="signin-btn-container">
+                    <Button variant="contained" color="secondary">
+                        <Link to="/auth" className="signin-btn">Sign In</Link>
+                    </Button>
+                </div>
+            </div>
         </div>
     )
 }
