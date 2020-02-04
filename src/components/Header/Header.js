@@ -23,7 +23,7 @@ const Header = ({ title, setTitle, dispatch, setPage, DEFAULT_PAGE }) => {
             <div className="nav-bar">
                 <div className="logo">
                     <Link to="/" onClick={() => setPage(DEFAULT_PAGE)}>
-                        <Movie style={{ fontSize: 40, color: '#fff' }} /> 
+                        <Movie style={{ fontSize: 40, color: 'gold' }} /> 
                         <div>Manny Movies</div>
                     </Link>
                 </div>

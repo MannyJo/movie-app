@@ -3,10 +3,12 @@
 @import "./main";
 @import "./category";
 @import "./movie";
+@import "./detail";
 
 body {
     margin: 0;
     background: url('../background.jpg') no-repeat center center fixed;
     background-size: cover;
     color: white;
+    font-family: Arial, Helvetica, sans-serif;
 }
