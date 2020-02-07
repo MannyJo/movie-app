@@ -8,7 +8,7 @@ import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Detail from '../Detail/Detail';
 import SignIn from '../SignIn/SignIn';
-import { reducer } from '../../reducers/reducer';
+import { titleReducer as reducer } from '../../reducers/reducer';
 
 import '../../styles/style.scss';
 

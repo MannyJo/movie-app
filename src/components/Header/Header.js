@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Link,
 } from 'react-router-dom';
@@ -7,6 +7,14 @@ import Button from '@material-ui/core/Button';
 import Movie from '@material-ui/icons/Movie';
 
 const Header = ({ title, setTitle, dispatch, setPage, DEFAULT_PAGE }) => {
+    const [token, setToken] = useState(window.sessionStorage.getItem('token'));
+
+    useEffect(() => {
+        setToken(window.sessionStorage.getItem('token'));
+        return () => {
+            setToken('')
+        }
+    }, [ window.sessionStorage.getItem('token') ])
   
     const handleChange = () => e => {
         setTitle(e.target.value);
@@ -16,6 +24,11 @@ const Header = ({ title, setTitle, dispatch, setPage, DEFAULT_PAGE }) => {
         e.preventDefault();
         setPage(DEFAULT_PAGE);
         dispatch({ type: 'SEARCH_WITH_TITLE', payload: { title } });
+    }
+
+    const signOut = () => {
+        window.sessionStorage.removeItem('token');
+        setToken('');
     }
 
     return (
@@ -43,9 +56,19 @@ const Header = ({ title, setTitle, dispatch, setPage, DEFAULT_PAGE }) => {
                 </div>
                 <div className="empty-space"></div>
                 <div className="signin-btn-container">
-                    <Button variant="contained" color="secondary">
-                        <Link to="/auth" className="signin-btn">Sign In</Link>
-                    </Button>
+                    {
+                        token === '' || token === null || token === undefined?
+                        <Button variant="contained" color="secondary">
+                            <Link to="/auth" className="signin-btn">Sign In</Link>
+                        </Button>
+                        :
+                        <div>
+                            <button>Watchlist</button>
+                            <Button variant="contained" color="default" onClick={signOut}>
+                                Sign Out
+                            </Button>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

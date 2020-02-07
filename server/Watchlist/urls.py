@@ -1,7 +1,10 @@
-from rest_framework import routers
-from .api import WatchlistViewSet
+from django.urls import path
+from .views import (
+    add_movie,
+)
 
-router = routers.DefaultRouter()
-router.register('api/watchlist', WatchlistViewSet, 'watchlist')
+app_name = 'watchlist'
 
-urlpatterns = router.urls
+urlpatterns = [
+    path('add/', add_movie, name='add_movie'),
+]
