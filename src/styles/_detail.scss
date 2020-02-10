@@ -40,14 +40,20 @@
                 background-color: lightcoral;
                 font-size: 20px;
                 color: white;
+                outline: none;
 
                 svg {
                     float: left;
                 }
 
                 &:hover {
-                    background-color: darken($color: lightcoral, $amount: 40%);
+                    background-color: darken($color: lightcoral, $amount: 20%);
                 }
+            }
+
+            .movie-detail-watchlist-btn.exist {
+                background-color: grey;
+                
             }
         
             .movie-detail-genre {

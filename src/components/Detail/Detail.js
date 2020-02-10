@@ -1,20 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { movieApiAxios as axios } from '../../axios';
 import { movieParam } from '../../config';
 import { MOVIE_DB_IMAGE_URL } from '../../api/movieApi';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
+import { serverAxios, movieApiAxios } from '../../axios';
 
-const Detail = () => {
+const Detail = ({ token, setToken }) => {
     const { id } = useParams();
     const [detail, setDetail] = useState({});
+    const [watchlistBtn, setWatchlistBtn] = useState('');
 
     useEffect(() => {
-        axios.get(`/movie/${id}`, { params: movieParam })
+        movieApiAxios.get(`/movie/${id}`, { params: movieParam })
         .then(results => {
             setDetail(results.data);
         }).catch(err => {
-            console.log('Error with getting movie detail :', err);
+            console.error('Error with getting movie detail :', err);
+        });
+
+        serverAxios.get(`/api/watchlist/${id}`)
+        .then(results => {
+            if(results.data.is_exist === true) {
+                console.log('exist')
+                setWatchlistBtn('exist')
+            } else {
+                console.log('not exist')
+            }
+        }).catch(err => {
+            console.error('Error with getting watchlist status :', err);
         })
     }, [ id ])
 
@@ -24,6 +37,22 @@ const Detail = () => {
             return '$' + money.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
         }
         return '$0';
+    }
+
+    const addToMyWatchlist = movie_id => e => {
+        serverAxios.post(`/api/watchlist/add/`, { movie_id })
+        .then(results => {
+            console.log(results.data.response)
+            if(results.data.is_added === true) {
+                setWatchlistBtn('exist');
+            }
+        }).catch(err => {
+            if(err.response.status === 401) {
+                window.location.pathname = '/auth'
+            } else {
+                console.error(err)
+            }
+        })
     }
 
     return (
@@ -43,7 +72,11 @@ const Detail = () => {
                         {detail.tagline}
                     </p>
                     <div>
-                        <button className="movie-detail-watchlist-btn">
+                        <button 
+                            onClick={addToMyWatchlist(detail.id)} 
+                            className={`movie-detail-watchlist-btn ${watchlistBtn}`}
+                            disabled={watchlistBtn === 'exist' ? true : false}
+                        >
                             <BookmarkBorderIcon />
                             <span>Add to my Watchlist</span>
                         </button>

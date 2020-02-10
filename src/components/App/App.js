@@ -18,6 +18,7 @@ function App() {
   const [title, setTitle] = useState(initTitle.title);
   const [page, setPage] = useState(DEFAULT_PAGE);
   const [state, dispatch] = useReducer(reducer, initTitle);
+  const [token, setToken] = useState(window.sessionStorage.getItem('token'));
 
   return (
     <div>
@@ -27,6 +28,8 @@ function App() {
           setTitle={setTitle} 
           dispatch={dispatch} 
           setPage={setPage} 
+          token={token}
+          setToken={setToken}
           DEFAULT_PAGE={DEFAULT_PAGE} 
         />
         <Switch>
@@ -40,7 +43,12 @@ function App() {
               DEFAULT_PAGE={DEFAULT_PAGE} 
             />
           </Route>
-          <Route path="/detail/:id" component={Detail} />
+          <Route path="/detail/:id">
+            <Detail
+              token={token}
+              setToken={setToken}
+            />
+          </Route>
           <Route path="/auth" component={SignIn} />
         </Switch>
       </Router>

@@ -6,8 +6,7 @@ import SearchBtn from '@material-ui/icons/Search'
 import Button from '@material-ui/core/Button';
 import Movie from '@material-ui/icons/Movie';
 
-const Header = ({ title, setTitle, dispatch, setPage, DEFAULT_PAGE }) => {
-    const [token, setToken] = useState(window.sessionStorage.getItem('token'));
+const Header = ({ title, setTitle, dispatch, setPage, DEFAULT_PAGE, token, setToken }) => {
 
     useEffect(() => {
         setToken(window.sessionStorage.getItem('token'));
