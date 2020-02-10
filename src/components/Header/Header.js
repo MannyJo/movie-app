@@ -5,6 +5,8 @@ import {
 import SearchBtn from '@material-ui/icons/Search'
 import Button from '@material-ui/core/Button';
 import Movie from '@material-ui/icons/Movie';
+import ListIcon from '@material-ui/icons/List';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const Header = ({ title, setTitle, dispatch, setPage, DEFAULT_PAGE, token, setToken }) => {
 
@@ -61,11 +63,13 @@ const Header = ({ title, setTitle, dispatch, setPage, DEFAULT_PAGE, token, setTo
                             <Link to="/auth" className="signin-btn">Sign In</Link>
                         </Button>
                         :
-                        <div>
-                            <button>Watchlist</button>
-                            <Button variant="contained" color="default" onClick={signOut}>
-                                Sign Out
-                            </Button>
+                        <div className="header-btn-list">
+                            <button className="watchlist-btn">
+                                <Link to="/watchlist"><ListIcon /> Watchlist</Link>
+                            </button>
+                            <button className="signout-btn" onClick={signOut}>
+                                <ExitToAppIcon /> Sign Out
+                            </button>
                         </div>
                     }
                 </div>

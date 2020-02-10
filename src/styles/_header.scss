@@ -70,6 +70,44 @@
 
         .signin-btn-container {
             margin-right: 15px; 
+
+            .header-btn-list {
+                display: inline-flex;
+                align-items: center;
+
+                .watchlist-btn {
+                    background: none;
+                    border: none;
+                    font-size: 15px;
+                    margin: 10px;
+                    height: 30px;
+    
+                    a {
+                        outline: none;
+                        text-decoration: none;
+                        color: white;
+                        display: inline-flex;
+                        align-items: center;
+                    }
+                }
+
+                .signout-btn {
+                    outline: none;
+                    text-decoration: none;
+                    color: white;
+                    display: inline-flex;
+                    align-items: center;
+                    background-color: #4f4f4f;
+                    border: none;
+                    border-radius: 5px;
+                    height: 40px;
+                    font-size: 15px;
+
+                    &:hover {
+                        background-color: lighten($color: #4f4f4f, $amount: 20%);
+                    }
+                }
+            }
         }
     }
 }

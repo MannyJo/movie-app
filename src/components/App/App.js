@@ -8,6 +8,7 @@ import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Detail from '../Detail/Detail';
 import SignIn from '../SignIn/SignIn';
+import Watchlist from '../Watchlist/Watchlist';
 import { titleReducer as reducer } from '../../reducers/reducer';
 
 import '../../styles/style.scss';
@@ -50,6 +51,9 @@ function App() {
             />
           </Route>
           <Route path="/auth" component={SignIn} />
+          <Route path="/watchlist">
+            <Watchlist />
+          </Route>
         </Switch>
       </Router>
     </div>
