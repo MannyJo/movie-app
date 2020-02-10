@@ -36,8 +36,25 @@ def add_movie(request):
             added_movie = serializer.save()
             data['user'] = added_movie.user.username
             data['movie_id'] = added_movie.movie_id
+            data['is_added'] = True
         else:
             data = serializer.errors
+            data['is_added'] = False
             
         return Response(data=data)
-        
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def check_watchlist_by_id(request, id):
+    data = {}
+    print('id :', id)
+    if request.method == 'GET':
+        try:
+            user = request.user
+            movie = Watchlist.objects.get(user=user, movie_id=id)
+            data['is_exist'] = True
+            print(movie)
+        except Watchlist.DoesNotExist:
+            data['is_exist'] = False
+
+        return Response(data=data, status=status.HTTP_200_OK)
