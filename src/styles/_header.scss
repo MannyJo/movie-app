@@ -5,6 +5,7 @@
     width: 100%;
     height: $stickyWidth;
     background-color: black;
+    z-index: 100;
 
     .nav-bar {
         display: flex;
