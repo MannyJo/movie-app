@@ -7,7 +7,7 @@ import {
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Detail from '../Detail/Detail';
-import SignIn from '../SignIn/SignIn';
+import Login from '../Login/Login';
 import Watchlist from '../Watchlist/Watchlist';
 import { titleReducer as reducer } from '../../reducers/reducer';
 
@@ -50,7 +50,7 @@ function App() {
               setToken={setToken}
             />
           </Route>
-          <Route path="/auth" component={SignIn} />
+          <Route path="/auth" component={Login} />
           <Route path="/watchlist">
             <Watchlist />
           </Route>
