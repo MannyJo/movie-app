@@ -7,6 +7,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from .models import Watchlist
 from .serializers import WatchlistSerializer
+import json
 
 # Create your views here.
 @api_view(['POST'])
@@ -58,3 +59,24 @@ def check_watchlist_by_id(request, id):
             data['is_exist'] = False
 
         return Response(data=data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_watchlist(request):
+    data = {}
+    user = request.user
+
+    if request.method == 'GET':
+        try:
+            movies = Watchlist.objects.filter(user=user).values('movie_id')
+
+            print(movies.count())
+            print(list(movies))
+            
+            data['count'] = movies.count()
+            data['movies'] = list(movies)
+        except Watchlist.DoesNotExist:
+            data['response'] = 'There is no movie in the list.'
+            data['count'] = 0
+        
+        return Response(data=data)
