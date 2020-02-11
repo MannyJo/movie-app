@@ -28,14 +28,22 @@ def get_user_info(request, email):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def user_register(request):
+    data = {}
     if request.method == 'POST':
+        checkUser = {}
+        try:
+            checkUser = User.objects.get(username=request.data['username'])
+        except User.DoesNotExist:
+            print('pass')
+
+        if(checkUser):
+            data['response'] = 'The email has already been taken'
+            return Response(data=data)
+        
         serializer = UserSerializer(data=request.data)
-        data = {}
         if serializer.is_valid():
             user = serializer.save()
-            data['response'] = 'successfully registered a new user.'
-            data['email'] = user.email
-            data['username'] = user.username
+            data['email'] = user.username
             token = Token.objects.get(user=user).key
             data['token'] = token
         else:
