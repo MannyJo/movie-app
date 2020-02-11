@@ -6,6 +6,9 @@
 
     .movie-detail-img {
         height: 450px;
+        img {
+            height: 100%;
+        }
     }
     
     .movie-detail-info {

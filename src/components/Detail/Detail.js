@@ -4,6 +4,7 @@ import { movieParam } from '../../config';
 import { MOVIE_DB_IMAGE_URL } from '../../api/movieApi';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import { serverAxios, movieApiAxios } from '../../axios';
+import bgImg from '../../no-image.png';
 
 const Detail = ({ token, setToken }) => {
     const { id } = useParams();
@@ -18,17 +19,19 @@ const Detail = ({ token, setToken }) => {
             console.error('Error with getting movie detail :', err);
         });
 
-        serverAxios.get(`/api/watchlist/${id}`)
-        .then(results => {
-            if(results.data.is_exist === true) {
-                console.log('exist')
-                setWatchlistBtn('exist')
-            } else {
-                console.log('not exist')
-            }
-        }).catch(err => {
-            console.error('Error with getting watchlist status :', err);
-        })
+        if(window.sessionStorage.token) {
+            serverAxios.get(`/api/watchlist/${id}`)
+            .then(results => {
+                if(results.data.is_exist === true) {
+                    console.log('exist')
+                    setWatchlistBtn('exist')
+                } else {
+                    console.log('not exist')
+                }
+            }).catch(err => {
+                console.error('Error with getting watchlist status :', err);
+            })
+        }
     }, [ id ])
 
     const numberToMoney = moneyStr => {
@@ -58,7 +61,11 @@ const Detail = ({ token, setToken }) => {
     return (
         <div className="movie-detail-container">
             <div className="movie-detail-img">
-                <img src={MOVIE_DB_IMAGE_URL.small+detail.poster_path} alt={detail.title} />
+                {
+                    detail.poster_path === null ?
+                    <img src={bgImg} alt="no image" />:
+                    <img src={MOVIE_DB_IMAGE_URL.small+detail.poster_path} alt={detail.title} />
+                }
             </div>
             <div className="movie-detail-info">
                 <div className="movie-detail-basic-info">
