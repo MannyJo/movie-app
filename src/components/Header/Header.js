@@ -38,7 +38,7 @@ const Header = ({ title, setTitle, dispatch, setPage, DEFAULT_PAGE, token, setTo
                 <div className="logo">
                     <Link to="/" onClick={() => setPage(DEFAULT_PAGE)}>
                         <Movie style={{ fontSize: 40, color: 'gold' }} /> 
-                        <div>Manny Movies</div>
+                        <div>My Movie</div>
                     </Link>
                 </div>
                 <div>
@@ -56,11 +56,11 @@ const Header = ({ title, setTitle, dispatch, setPage, DEFAULT_PAGE, token, setTo
                     </form>
                 </div>
                 <div className="empty-space"></div>
-                <div className="signin-btn-container">
+                <div className="login-btn-container">
                     {
                         token === '' || token === null || token === undefined?
                         <Button variant="contained" color="secondary">
-                            <Link to="/auth" className="signin-btn">Sign In</Link>
+                            <Link to="/auth" className="login-btn">Login</Link>
                         </Button>
                         :
                         <div className="header-btn-list">
