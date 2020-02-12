@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { serverAxios } from '../../axios';
+import LoginForm from '../LoginForm/LoginForm';
+import RegisterForm from '../RegisterForm/RegisterForm';
 
 const Login = () => {
     serverAxios.defaults.headers['Authorization'] = '';
@@ -66,93 +68,26 @@ const Login = () => {
         <div className="login-container">
             {
                 isLogin === true ?
-                <div>
-                    <h1>Login</h1>
-                    <form onSubmit={handleLogin()}>
-                        <label htmlFor="email">
-                            <div>Email</div>
-                            <input 
-                                type="email"
-                                name="email"
-                                value={email} 
-                                onChange={handleChange('email')}
-                                placeholder="email@example.com" 
-                                required
-                            />
-                        </label>
-                        <label htmlFor="password">
-                            <div>Password</div>
-                            <input 
-                                type="password" 
-                                name="password"
-                                value={password} 
-                                onChange={handleChange('password')}
-                                placeholder="password" 
-                                required
-                            />
-                        </label>
-                        <div className={`login-login-failed ${warning}`}>
-                            {response}
-                        </div>
-                        <div className="login-btn">
-                            <button type="submit">Login</button>
-                        </div>
-                    </form>
-                    <p>
-                        Not a user?&nbsp;
-                        <span onClick={() => setIsLogin(false)}>
-                            <strong>Join</strong>
-                        </span>
-                    </p>
-                </div> :
-                <div>
-                    <h1>Join</h1>
-                    <form onSubmit={handleJoin()}>
-                        <label htmlFor="email">
-                            <div>Email</div>
-                            <input 
-                                type="email"
-                                name="email"
-                                value={email} 
-                                onChange={handleChange('email')}
-                                placeholder="email@example.com" 
-                                required
-                            />
-                        </label>
-                        <label htmlFor="password">
-                            <div>Password</div>
-                            <div className="password-container">
-                                <input 
-                                    type={isHidden ? 'password' : 'text'}
-                                    name="password"
-                                    value={password} 
-                                    onChange={handleChange('password')}
-                                    placeholder="password" 
-                                    required
-                                />
-                                <button 
-                                    className="password-toggle"
-                                    onClick={handleClickTogglePassword()}
-                                    type="button"
-                                >
-                                    {isHidden ? 'show' : 'hide'}
-                                </button>
-                            </div>
-                        </label>
-                        <div className={`login-login-failed ${warning}`}>
-                            {response}
-                        </div>
-                        <div className="login-btn">
-                            <button type="submit">Join</button>
-                        </div>
-                    </form>
-                    <p>
-                        Already on MyMovie?&nbsp;
-                        <span onClick={() => setIsLogin(true)}>
-                            <strong>Login</strong>
-                        </span>
-                    </p>
-                </div>
+                <LoginForm 
+                    handleLogin={handleLogin}
+                    handleChange={handleChange}
+                    setIsLogin={setIsLogin}
+                    email={email}
+                    password={password}
+                    response={response}
+                    warning={warning}
+                /> :
+                <RegisterForm
+                    handleChange={handleChange}
+                    handleJoin={handleJoin}
+                    isHidden={isHidden}
+                    handleClickTogglePassword={handleClickTogglePassword}
+                    setIsLogin={setIsLogin}
+                    email={email}
+                    password={password}
+                    response={response}
+                    warning={warning}
+                />
             }
         </div>
     )
