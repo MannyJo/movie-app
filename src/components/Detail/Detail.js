@@ -6,7 +6,7 @@ import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import { serverAxios, movieApiAxios } from '../../axios';
 import bgImg from '../../no-image.png';
 
-const Detail = ({ token, setToken }) => {
+const Detail = () => {
     const { id } = useParams();
     const [detail, setDetail] = useState({});
     const [watchlistBtn, setWatchlistBtn] = useState('');
@@ -23,14 +23,11 @@ const Detail = ({ token, setToken }) => {
             serverAxios.get(`/api/watchlist/${id}`)
             .then(results => {
                 if(results.data.is_exist === true) {
-                    console.log('exist')
                     setWatchlistBtn('exist')
-                } else {
-                    console.log('not exist')
                 }
             }).catch(err => {
                 console.error('Error with getting watchlist status :', err);
-            })
+            });
         }
     }, [ id ])
 
@@ -45,7 +42,6 @@ const Detail = ({ token, setToken }) => {
     const addToMyWatchlist = movie_id => e => {
         serverAxios.post(`/api/watchlist/add/`, { movie_id })
         .then(results => {
-            console.log(results.data.response)
             if(results.data.is_added === true) {
                 setWatchlistBtn('exist');
             }
@@ -53,9 +49,24 @@ const Detail = ({ token, setToken }) => {
             if(err.response.status === 401) {
                 window.location.pathname = '/auth'
             } else {
-                console.error(err)
+                console.error('Error with putting this movie to my watchlist :', err);
             }
-        })
+        });
+    }
+
+    const removeFromMyWatchlist = id => e => {
+        serverAxios.delete(`/api/watchlist/remove/${id}/`)
+        .then(results => {
+            if(results.data.is_deleted === true) {
+                setWatchlistBtn('');
+            }
+        }).catch(err => {
+            if(err.response.status === 401) {
+                window.location.pathname = '/auth'
+            } else {
+                console.error('Error with putting this movie to my watchlist :', err);
+            }
+        });
     }
 
     return (
@@ -80,20 +91,27 @@ const Detail = ({ token, setToken }) => {
                     </p>
                     <div>
                         <button 
-                            onClick={addToMyWatchlist(detail.id)} 
+                            onClick={watchlistBtn === 'exist' ? removeFromMyWatchlist(detail.id) : addToMyWatchlist(detail.id)} 
                             className={`movie-detail-watchlist-btn ${watchlistBtn}`}
-                            disabled={watchlistBtn === 'exist' ? true : false}
                         >
                             <BookmarkBorderIcon />
-                            <span>Add to my Watchlist</span>
+                            {
+                                watchlistBtn === 'exist' ?
+                                <span>Remove from my Watchlist</span>:
+                                <span>Add to my Watchlist</span>
+                            }
                         </button>
                     </div>
                     <p className="movie-detail-overview">
                         {detail.overview}
                     </p>
                     <div>
-                        <span>Genres : </span>
-                        {detail.genres && detail.genres.map(genre => <span className="movie-detail-genre" key={genre.id}>{genre.name}</span>)}
+                        {
+                            detail.genres && 
+                            <span>
+                                Genres : {detail.genres.map(genre => <span className="movie-detail-genre" key={genre.id}>{genre.name}</span>)}
+                            </span>
+                        }
                     </div>
                 </div>
                 <div className="movie-detail-add-info">
